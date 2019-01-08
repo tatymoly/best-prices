@@ -2,17 +2,17 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { startWith, map } from 'rxjs/operators';
-
+import { ActivatedRoute } from '@angular/router';
 import { BestPriceService } from '../shared/services/best-price.service';
 
 export interface CountryGroup {
   letter: string;
   names;
 }
-export const _filter = (opt: string[], value: string): string[] => {
+export const _filterCity = (item: string, value: string) => {
   const filterValue = value.toLowerCase();
 
-  return opt.filter(item => item.toLowerCase().indexOf(filterValue) === 0);
+  return item.toLowerCase().includes(filterValue);
 };
 
 @Component({
@@ -111,18 +111,28 @@ export class SearchComponent implements OnInit {
 
   countryGroupOptions: Observable<CountryGroup[]>;
 
+  myParams;
   country: string;
   destination: string;
   searchOptions: Object = {
     country: this.country,
     destination: this.destination,
   };
+
   constructor(
+    private route: ActivatedRoute,
     private fb: FormBuilder,
     private bestPriceService: BestPriceService
   ) {}
 
   ngOnInit() {
+    this.route.params.subscribe(params => {
+      this.myParams = params;
+      console.log(this.myParams);
+      this.bestPriceService.searchBestPrices(this.myParams).subscribe(res => {
+        console.log(res);
+      });
+    });
     // tslint:disable-next-line:no-non-null-assertion
     this.countryGroupOptions = this.countryForm
       .get('countryGroup')!
@@ -130,24 +140,17 @@ export class SearchComponent implements OnInit {
         startWith(''),
         map(value => this._filterGroup(value))
       );
-
-    this.bestPriceService.searchBestPrices().subscribe(res => {
-      console.log(res);
-    });
   }
 
   private _filterGroup(value: string): CountryGroup[] {
     if (value) {
       return this.countryGroups
-        .map(group => ({
-          letter: group.letter,
-          names: [
-            {
-              city: _filter(group.names.city, value),
-              iataCityCode: _filter(group.names.iataCityCode, value),
-            },
-          ],
-        }))
+        .map(group => {
+          return {
+            letter: group.letter,
+            names: group.names.filter(item => _filterCity(item.city, value)),
+          };
+        })
         .filter(group => group.names.length > 0);
     }
     return this.countryGroups;

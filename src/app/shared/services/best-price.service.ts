@@ -8,8 +8,6 @@ import {
 import { Observable } from 'rxjs';
 import { map, catchError, filter } from 'rxjs/operators';
 
-import { ActivatedRoute } from '@angular/router';
-
 @Injectable({
   providedIn: 'root',
 })
@@ -22,15 +20,10 @@ export class BestPriceService {
   myParams;
   private url = 'https://viajala.com.co/services/flight/best-price';
 
-  constructor(private http: HttpClient, private route: ActivatedRoute) {
-    this.route.queryParams.subscribe(params => {
-      console.log(params);
-      this.myParams = params;
-    });
-  }
+  constructor(private http: HttpClient) {}
 
-  searchBestPrices() {
-    return this.http.get<any>(this.url, { params: this.myParams }).pipe(
+  searchBestPrices(params) {
+    return this.http.get<any>(this.url, { params }).pipe(
       map(res => {
         return res;
       })

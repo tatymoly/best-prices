@@ -28,27 +28,36 @@ export class SearchComponent implements OnInit {
       name: 'Medellín',
       iataCode: 'MDE',
     },
+    {
+      name: 'Sao Pablo',
+      iatacode: 'SAO',
+    },
+    {
+      name: 'Santiago de Chile',
+      iataCode: 'SCL',
+    },
   ];
 
-  travelTypes: string[] = ['Ida y Regreso', 'Solo Ida'];
-  travelTpye: string;
-  cities: string;
-  country: string;
-  myObj = {
+  country;
+  destination;
+  myParams;
+  searchOptions = {
     country: '',
     destination: '',
   };
-  myParams;
+  options: FormGroup;
 
   constructor(
+    private fb: FormBuilder,
     private route: ActivatedRoute,
     private bestPriceService: BestPriceService
   ) {
+    this.options = fb.group({
+      country: '',
+      origin: '',
+      destination: '',
+    });
     this.getUrlParams();
-    console.log(this.country);
-    console.log(this.cities);
-    this.myObj.country = this.country;
-    this.myObj.destination = this.cities;
   }
 
   ngOnInit() {}
@@ -61,10 +70,15 @@ export class SearchComponent implements OnInit {
   }
 
   sendParamsOptions() {
-    console.log(this.country);
-    console.log(this.cities);
-    this.bestPriceService.searchBestPrices(this.myObj).subscribe(res => {
-      console.log(res);
-    });
+    console.log(this.options);
+    this.searchOptions.country = this.options.get('country').value;
+    console.log(this.searchOptions.country);
+    this.searchOptions.destination = this.options.get('destination').value;
+    console.log(this.searchOptions.destination);
+    this.bestPriceService
+      .searchBestPrices(this.searchOptions)
+      .subscribe(res => {
+        console.log(res);
+      });
   }
 }

@@ -11,7 +11,6 @@ export interface CountryGroup {
 }
 export const _filterCity = (item: string, value: string) => {
   const filterValue = value.toLowerCase();
-
   return item.toLowerCase().includes(filterValue);
 };
 
@@ -21,9 +20,12 @@ export const _filterCity = (item: string, value: string) => {
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
-  travelTypes: string[] = ['Ida y Regreso', 'Solo Ida'];
-
   countryForm: FormGroup = this.fb.group({
+    originGroup: '',
+    destinationGroup: '',
+  });
+
+  destinationForm: FormGroup = this.fb.group({
     countryGroup: '',
   });
 
@@ -110,14 +112,19 @@ export class SearchComponent implements OnInit {
   ];
 
   countryGroupOptions: Observable<CountryGroup[]>;
+  destinationGroupOpt: Observable<CountryGroup[]>;
 
-  myParams;
+  travelTypes: string[] = ['Ida y Regreso', 'Solo Ida'];
+  travelTpye: string;
+
   country: string;
   destination: string;
+  returnDate: Boolean = false;
   searchOptions: Object = {
     country: this.country,
     destination: this.destination,
   };
+  myParams;
 
   constructor(
     private route: ActivatedRoute,
@@ -126,20 +133,38 @@ export class SearchComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.route.params.subscribe(params => {
+    this.getUrlParams();
+    this.getCountryGroupOptions();
+  }
+
+  getUrlParams() {
+    this.route.queryParams.subscribe(params => {
       this.myParams = params;
-      console.log(this.myParams);
-      this.bestPriceService.searchBestPrices(this.myParams).subscribe(res => {
-        console.log(res);
-      });
+      this.sendParamsOptions();
     });
+  }
+
+  getCountryGroupOptions() {
     // tslint:disable-next-line:no-non-null-assertion
     this.countryGroupOptions = this.countryForm
-      .get('countryGroup')!
+      .get('originGroup')!
       .valueChanges.pipe(
         startWith(''),
         map(value => this._filterGroup(value))
       );
+    // tslint:disable-next-line:no-non-null-assertion
+    this.countryGroupOptions = this.countryForm
+      .get('destinationGroup')!
+      .valueChanges.pipe(
+        startWith(''),
+        map(value => this._filterGroup(value))
+      );
+  }
+
+  sendParamsOptions() {
+    this.bestPriceService.searchBestPrices(this.myParams).subscribe(res => {
+      console.log(res);
+    });
   }
 
   private _filterGroup(value: string): CountryGroup[] {
@@ -148,7 +173,11 @@ export class SearchComponent implements OnInit {
         .map(group => {
           return {
             letter: group.letter,
-            names: group.names.filter(item => _filterCity(item.city, value)),
+            names: group.names.filter(
+              item =>
+                _filterCity(item.city, value) ||
+                _filterCity(item.iataCityCode, value)
+            ),
           };
         })
         .filter(group => group.names.length > 0);

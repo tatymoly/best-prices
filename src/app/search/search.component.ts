@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BestPriceService } from '../shared/services/best-price.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   countryGroup = [
     {
       country: 'CO',
@@ -52,7 +54,7 @@ export class SearchComponent implements OnInit {
     destination: '',
   };
   options: FormGroup;
-
+  private unsub: Subject<any> = new Subject();
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -69,7 +71,7 @@ export class SearchComponent implements OnInit {
   ngOnInit() {}
 
   getUrlParams() {
-    this.route.queryParams.subscribe(params => {
+    this.route.queryParams.pipe(takeUntil(this.unsub)).subscribe(params => {
       this.myParams = params;
       this.sendParamsOptions();
     });
@@ -78,8 +80,8 @@ export class SearchComponent implements OnInit {
   sendParamsOptions() {
     this.bestPriceService
       .searchBestPrices(this.searchOptions)
+      .pipe(takeUntil(this.unsub))
       .subscribe(res => {
-        console.log(res);
         this.data = res;
       });
   }
@@ -122,5 +124,10 @@ export class SearchComponent implements OnInit {
     this.returnDateFormated = this.datepipe.transform(v, 'yyy-MM-dd');
     console.log(this.returnDateFormated);
     this.searchOptions['returnDateMin'] = this.returnDateFormated;
+  }
+
+  ngOnDestroy() {
+    this.unsub.next();
+    this.unsub.complete();
   }
 }

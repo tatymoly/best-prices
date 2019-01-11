@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
-import { Observable } from 'rxjs';
-import { startWith, map } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { BestPriceService } from '../shared/services/best-price.service';
 
@@ -39,17 +37,21 @@ export class SearchComponent implements OnInit {
     },
   ];
 
-  country;
-  destination;
+  country: string;
+  destination: string;
+  data: string;
+  departureDateMin: string;
+  departureDateFormated: string;
+  returnDateMin: string;
+  returnDateFormated: string;
   origins = [];
   destinations = [];
-  myParams;
+  myParams: Object;
   searchOptions = {
     country: '',
     destination: '',
   };
   options: FormGroup;
-  data;
 
   constructor(
     private fb: FormBuilder,
@@ -58,14 +60,11 @@ export class SearchComponent implements OnInit {
     private datepipe: DatePipe
   ) {
     this.options = fb.group({
-      country: '',
+      country: ['', Validators.required],
       origin: '',
-      destination: '',
-      departureDateMin: '',
+      destination: ['', Validators.required],
     });
     this.getUrlParams();
-    console.log(this.origins);
-    console.log(this.destinations);
   }
 
   ngOnInit() {}
@@ -78,7 +77,6 @@ export class SearchComponent implements OnInit {
   }
 
   sendParamsOptions() {
-    console.log(this.options);
     this.bestPriceService
       .searchBestPrices(this.searchOptions)
       .subscribe(res => {
@@ -107,7 +105,7 @@ export class SearchComponent implements OnInit {
     const v = event.source.value;
     const position = this.destinations.indexOf(v);
     if (position > 0) {
-      this.destination.splice(position, 1);
+      this.destinations.splice(position, 1);
     } else {
       this.destinations.push(v);
     }
@@ -115,13 +113,15 @@ export class SearchComponent implements OnInit {
   }
 
   checkDepartureDate(event) {
-    console.log(event);
-    const departureDate = event.target.innerHTML;
-    const departureDateFormated = this.datepipe.transform(
-      departureDate,
-      'yyyy-MM-dd'
-    );
-    console.log(departureDateFormated);
-    this.searchOptions['departureDateMin'] = departureDateFormated;
+    const v = event.value;
+    this.departureDateFormated = this.datepipe.transform(v, 'yyyy-MM-dd');
+    console.log(this.departureDateFormated);
+    this.searchOptions['departureDateMin'] = this.departureDateFormated;
+  }
+  checkReturnDate(event) {
+    const v = event.value;
+    this.returnDateFormated = this.datepipe.transform(v, 'yyy-MM-dd');
+    console.log(this.returnDateFormated);
+    this.searchOptions['returnDateMin'] = this.returnDateFormated;
   }
 }

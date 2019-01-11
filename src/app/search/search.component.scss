@@ -1,11 +1,26 @@
-.grid-container {
-  padding: 0;
-  .grid-container-row {
+.row-container {
+  max-height: 200px;
+  padding: 20px;
+  .city-list {
+    padding-top: 10px;
+    padding-left: 20px;
+    display: block;
+    mat-checkbox {
+      display: block;
+    }
+  }
+}
+.send-button {
+  width: 90%;
+  margin-left: 5%;
+}
+.results-list {
+  .offers-list {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-left: -5px;
-    margin-right: -5px;
-    flex-wrap: wrap;
+    padding-top: 20px;
+    p {
+      width: 30%;
+      text-align: center;
+    }
   }
 }

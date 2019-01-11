@@ -1,36 +1,119 @@
-<div class="example-container">
-  <form class="example-container" [formGroup]="options">
-    <div>
-      <label>Tipo de Viaje: </label>
-      <mat-radio-group>
-        <mat-radio-button value="two-ways">Ida y Regreso</mat-radio-button>
-        <mat-radio-button value="one-way">Solo Ida</mat-radio-button>
-      </mat-radio-group>
-    </div>
-    <div>
-      <label>Origen:</label>
-      <mat-form-field>
-        <mat-select required formControlName="country">
-          <mat-option>-- None --</mat-option>
-          <mat-option
-            [value]="option.country"
-            name="country"
-            *ngFor="let option of countryGroup"
-            >{{ option.country }}</mat-option
-          >
-        </mat-select>
-        <mat-label>Counrty</mat-label>
-      </mat-form-field>
-      <div>
-        <mat-checkbox
-          formControlName="destination"
-          *ngFor="let option of cityGroup"
-          [value]="option.iataCode"
-          >{{ option.name }}</mat-checkbox
-        >
+<div>
+  <mat-tab-group backgroundColor="primary">
+    <mat-tab label="ORIGEN">
+      <div class="row-container">
+        <form [formGroup]="options">
+          <div>
+            <label>Country:</label>
+            <mat-form-field>
+              <mat-select required formControlName="country">
+                <mat-option>-- None --</mat-option>
+                <mat-option
+                  (click)="checkCountryValue($event)"
+                  [value]="option.country"
+                  name="country"
+                  *ngFor="let option of countryGroup"
+                  >{{ option.country }}</mat-option
+                >
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="city-list">
+            <label>Origen:</label>
+            <mat-checkbox
+              formControlName="origin"
+              *ngFor="let option of cityGroup"
+              [value]="option.iataCode"
+              (change)="checkOriginValue($event)"
+              >{{ option.name }}</mat-checkbox
+            >
+          </div>
+        </form>
       </div>
-    </div>
-  </form>
+    </mat-tab>
+    <mat-tab label="DESTINO">
+      <div class="row-container">
+        <form [formGroup]="options">
+          <div class="city-list">
+            <label>Destino:</label>
+            <mat-checkbox
+              formControlName="destination"
+              *ngFor="let option of cityGroup"
+              [value]="option.iataCode"
+              (change)="checkDestinationValue($event)"
+              >{{ option.name }}</mat-checkbox
+            >
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab label="FECHA">
+      <div class="row-container">
+        <label>Tipo de Viaje: </label>
+        <mat-radio-group class="city-list">
+          <mat-radio-button value="two-ways">Ida y Regreso</mat-radio-button>
+          <mat-radio-button value="one-way">Solo Ida</mat-radio-button>
+        </mat-radio-group>
+      </div>
+      <div class="row-container">
+        <form [formGroup]="options">
+          <div>
+            <mat-form-field>
+              <input
+                matInput
+                formControlName="departureDateMin"
+                [matDatepicker]="departureDateMin"
+                placeholder="Fecha de Ida"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="departureDateMin"
+                (change)="checkDepartureDate($event)"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #departureDateMin></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field>
+              <input
+                matInput
+                [matDatepicker]="returnDateMin"
+                placeholder="Fecha de Regreso"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="returnDateMin"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #returnDateMin></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>
 
-<a [routerLink]="['']" (click)="sendParamsOptions()">Search Now</a>
+<div>
+  <button
+    class="send-button"
+    mat-raised-button
+    color="primary"
+    [routerLink]="['']"
+    (click)="sendParamsOptions()"
+  >
+    Buscar
+  </button>
+</div>
+<div class="results-list">
+  <div *ngFor="let item of data">
+    <div class="offers-list">
+      <p>{{ item.origin.iata }}</p>
+      <p>{{ item.destination.iata }}</p>
+      <button
+        mat-raised-button
+        routerLink="{{ item.deeplink }}"
+        color="secondary"
+      >
+        {{ item.price | currency }}
+      </button>
+    </div>
+  </div>
+</div>

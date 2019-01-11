@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 import { SearchRoutingModule } from './search-routing.module';
 import { BestPriceService } from '../shared/services/best-price.service';
@@ -21,7 +21,7 @@ import { MaterialModule } from '../../material-module';
     FormsModule,
     ReactiveFormsModule,
   ],
-  providers: [BestPriceService, HttpClient],
+  providers: [BestPriceService, HttpClient, DatePipe],
   exports: [SearchComponent],
 })
 export class SearchModule {}

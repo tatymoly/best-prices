@@ -64,7 +64,6 @@ export class SearchComponent implements OnInit {
       origin: '',
       destination: ['', Validators.required],
     });
-    this.getUrlParams();
   }
 
   ngOnInit() {}

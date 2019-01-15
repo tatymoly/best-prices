@@ -19,6 +19,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     {
       country: 'CL',
     },
+    {
+      country: 'BR',
+    },
   ];
   cityGroup = [
     {

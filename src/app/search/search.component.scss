@@ -1,28 +1,54 @@
-.row-container {
-  max-height: 200px;
-  padding: 20px;
-  .city-list {
-    padding-top: 10px;
-    padding-left: 20px;
-    display: block;
-    mat-checkbox {
-      display: block;
-    }
-  }
-}
-.send-button {
+.btn__send {
   width: 90%;
   margin-left: 5%;
+  margin-top: 30px;
 }
-.results-list {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  .offers-list {
+.btn__price {
+  width: 30%;
+  color: white;
+  font-size: 14px;
+  padding: 0;
+}
+
+.row--container {
+  padding: 20px;
+  .row__list {
+    padding-top: 10px;
+    display: block;
+    label {
+      padding-right: 20px;
+    }
+    mat-checkbox {
+      display: block;
+      padding-top: 5px;
+    }
+    mat-radio-group {
+      display: flex;
+      .type-list {
+        padding-left: 20px;
+      }
+    }
+    mat-form-field {
+      width: 50%;
+    }
+  }
+  .row__list--types {
+    display: flex;
+    padding-top: 10px;
+    mat-radio-button {
+      padding-left: 10px;
+    }
+  }
+  .row__list--results {
     display: flex;
     padding-top: 20px;
     p {
       width: 30%;
       text-align: center;
+    }
+    .icon {
+      padding-top: 15px;
+      color: lightgray;
     }
   }
 }

@@ -54,7 +54,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     destination: '',
   };
   options: FormGroup;
+
   private unsub: Subject<any> = new Subject();
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -94,35 +96,35 @@ export class SearchComponent implements OnInit, OnDestroy {
   checkOriginValue(event) {
     const v = event.source.value;
     const position = this.origins.indexOf(v);
-    if (position > 0) {
+    if (position > -1) {
       this.origins.splice(position, 1);
     } else {
       this.origins.push(v);
     }
+    console.log(this.origins);
     this.searchOptions['origin'] = this.origins.join();
   }
 
   checkDestinationValue(event) {
     const v = event.source.value;
     const position = this.destinations.indexOf(v);
-    if (position > 0) {
+    if (position > -1) {
       this.destinations.splice(position, 1);
     } else {
       this.destinations.push(v);
     }
+    console.log(this.destinations);
     this.searchOptions['destination'] = this.destinations.join();
   }
 
   checkDepartureDate(event) {
     const v = event.value;
     this.departureDateFormated = this.datepipe.transform(v, 'yyyy-MM-dd');
-    console.log(this.departureDateFormated);
     this.searchOptions['departureDateMin'] = this.departureDateFormated;
   }
   checkReturnDate(event) {
     const v = event.value;
     this.returnDateFormated = this.datepipe.transform(v, 'yyy-MM-dd');
-    console.log(this.returnDateFormated);
     this.searchOptions['returnDateMin'] = this.returnDateFormated;
   }
 

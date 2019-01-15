@@ -49,6 +49,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   origins = [];
   destinations = [];
   myParams: Object;
+  showError: Boolean = false;
+  loading: Boolean = false;
   searchOptions = {
     country: '',
     destination: '',
@@ -80,11 +82,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   }
 
   sendParamsOptions() {
+    this.checkSameValues();
+    this.loading = true;
     this.bestPriceService
       .searchBestPrices(this.searchOptions)
       .pipe(takeUntil(this.unsub))
       .subscribe(res => {
         this.data = res;
+        this.loading = false;
       });
   }
 
@@ -101,7 +106,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       this.origins.push(v);
     }
-    console.log(this.origins);
     this.searchOptions['origin'] = this.origins.join();
   }
 
@@ -113,7 +117,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     } else {
       this.destinations.push(v);
     }
-    console.log(this.destinations);
     this.searchOptions['destination'] = this.destinations.join();
   }
 
@@ -128,6 +131,13 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchOptions['returnDateMin'] = this.returnDateFormated;
   }
 
+  checkSameValues() {
+    if (this.destinations.every(e => this.origins.includes(e))) {
+      this.showError = true;
+    } else {
+      this.showError = false;
+    }
+  }
   ngOnDestroy() {
     this.unsub.next();
     this.unsub.complete();

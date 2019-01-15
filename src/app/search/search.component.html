@@ -90,8 +90,11 @@
   </mat-tab>
 </mat-tab-group>
 
+<mat-error *ngIf="showError" class="error--text">
+  ¡El origen y destino no pueden ser iguales!
+</mat-error>
 <button
-  class="btn__send"
+  class="btn btn__send"
   mat-raised-button
   color="primary"
   [routerLink]="['']"
@@ -100,6 +103,11 @@
 >
   Buscar
 </button>
+<div *ngIf="loading" class="row--container">
+  <mat-progress-bar value="25" mode="indeterminate" color="accent">
+  </mat-progress-bar>
+</div>
+
 <div class="row--container">
   <div *ngFor="let item of data">
     <div class="row__list--results">
@@ -109,7 +117,7 @@
       <button
         mat-raised-button
         color="accent"
-        class="btn__price"
+        class="btn btn__price"
         routerLink="{{ item.deeplink }}"
       >
         {{ item.price | currency }}

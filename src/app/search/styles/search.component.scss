@@ -60,3 +60,18 @@
   font-size: 14px;
   padding: 0;
 }
+
+@media (min-width: 768px) {
+  :host ::ng-deep mat-tab-header {
+    display: grid;
+    justify-content: center;
+  }
+  .row__container {
+    width: 50%;
+    margin-left: 20%;
+  }
+  .btn.btn__send {
+    width: 50%;
+    margin-left: 25%;
+  }
+}

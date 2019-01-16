@@ -2,14 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
-import { BestPriceService } from '../shared/services/best-price.service';
+import { BestPriceService } from '../../services/best-price.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-search',
-  templateUrl: './search.component.html',
-  styleUrls: ['./search.component.scss'],
+  templateUrl: '../templates/search.component.html',
+  styleUrls: ['../styles/search.component.scss'],
 })
 export class SearchComponent implements OnInit, OnDestroy {
   countryGroup = [

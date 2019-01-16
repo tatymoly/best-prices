@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { BestPriceService } from './services/best-price.service';
+import { BestPriceService } from '../services/best-price.service';
 
 @NgModule({
   declarations: [],

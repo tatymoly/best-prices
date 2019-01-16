@@ -2,14 +2,14 @@ import { NgModule } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 
 import { SearchRoutingModule } from './search-routing.module';
-import { BestPriceService } from '../shared/services/best-price.service';
+import { BestPriceService } from '../../services/best-price.service';
 import { HttpClient } from '@angular/common/http';
 import { HttpClientModule } from '@angular/common/http';
-import { SearchComponent } from './search.component';
+import { SearchComponent } from '../components/search.component';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { MaterialModule } from '../../material-module';
+import { MaterialModule } from '../../../material-module';
 
 @NgModule({
   declarations: [SearchComponent],

@@ -54,6 +54,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   myParams: Object;
   showError: Boolean = false;
   loading: Boolean = false;
+  validForm: Boolean = false;
   searchOptions = {
     country: '',
     destination: '',
@@ -99,6 +100,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   checkCountryValue(event) {
     const v = event.target.innerHTML;
     this.searchOptions['country'] = v;
+    this.checkValidForm();
   }
 
   checkOriginValue(event) {
@@ -121,6 +123,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.destinations.push(v);
     }
     this.searchOptions['destination'] = this.destinations.join();
+    this.checkValidForm();
   }
 
   checkDepartureDate(event) {
@@ -139,6 +142,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.showError = true;
     } else {
       this.showError = false;
+    }
+  }
+  checkValidForm() {
+    if (
+      this.searchOptions.destination.length !== 0 &&
+      this.searchOptions.country.length !== 0
+    ) {
+      this.validForm = true;
+    } else {
+      this.validForm = false;
     }
   }
   ngOnDestroy() {

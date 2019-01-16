@@ -99,7 +99,7 @@
   color="primary"
   [routerLink]="['']"
   (click)="sendParamsOptions()"
-  [disabled]="options.invalid"
+  [disabled]="!validForm"
 >
   Buscar
 </button>

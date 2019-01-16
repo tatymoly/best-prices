@@ -1,6 +1,6 @@
 <mat-tab-group backgroundColor="primary">
   <mat-tab label="ORIGEN">
-    <div class="row--container">
+    <div class="row__container">
       <form [formGroup]="options">
         <div class="row__list">
           <label>Country:</label>
@@ -31,7 +31,7 @@
     </div>
   </mat-tab>
   <mat-tab label="DESTINO">
-    <div class="row--container">
+    <div class="row__container">
       <form [formGroup]="options">
         <div class="row__list">
           <label>Destino:</label>
@@ -48,8 +48,8 @@
     </div>
   </mat-tab>
   <mat-tab label="FECHA">
-    <div class="row--container">
-      <div class="row__list--types">
+    <div class="row__container">
+      <div class="row__list__types">
         <label>Tipo de Viaje: </label>
         <mat-radio-group class="type-list">
           <mat-radio-button #twoWays value="two-ways"
@@ -103,14 +103,14 @@
 >
   Buscar
 </button>
-<div *ngIf="loading" class="row--container">
+<div *ngIf="loading" class="row__container">
   <mat-progress-bar value="25" mode="indeterminate" color="accent">
   </mat-progress-bar>
 </div>
 
-<div class="row--container">
+<div class="row__container">
   <div *ngFor="let item of data">
-    <div class="row__list--results">
+    <div class="row__list__results">
       <p>{{ item.origin.iata }}</p>
       <mat-icon class="icon">arrow_right_alt</mat-icon>
       <p>{{ item.destination.iata }}</p>

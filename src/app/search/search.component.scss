@@ -1,5 +1,5 @@
-.row--container {
-  padding: 20px;
+.row__container {
+  padding: 6%;
   .row__list {
     padding-top: 10px;
     display: block;
@@ -20,14 +20,14 @@
       width: 50%;
     }
   }
-  .row__list--types {
+  .row__list__types {
     display: flex;
     padding-top: 10px;
     mat-radio-button {
       padding-left: 6px;
     }
   }
-  .row__list--results {
+  .row__list__results {
     display: flex;
     padding-top: 20px;
     p {

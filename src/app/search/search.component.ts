@@ -1,5 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  FormControl,
+} from '@angular/forms';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { BestPriceService } from '../shared/services/best-price.service';
@@ -54,6 +59,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   myParams: Object;
   showError: Boolean = false;
   loading: Boolean = false;
+  validForm: Boolean = false;
   searchOptions = {
     country: '',
     destination: '',
@@ -69,9 +75,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     private datepipe: DatePipe
   ) {
     this.options = fb.group({
-      country: ['', Validators.required],
+      country: ['', [Validators.required]],
       origin: '',
-      destination: ['', Validators.required],
+      destination: ['', [Validators.required]],
     });
   }
 
@@ -99,6 +105,7 @@ export class SearchComponent implements OnInit, OnDestroy {
   checkCountryValue(event) {
     const v = event.target.innerHTML;
     this.searchOptions['country'] = v;
+    this.checkValidForm();
   }
 
   checkOriginValue(event) {
@@ -121,6 +128,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.destinations.push(v);
     }
     this.searchOptions['destination'] = this.destinations.join();
+    this.checkValidForm();
   }
 
   checkDepartureDate(event) {
@@ -139,6 +147,17 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.showError = true;
     } else {
       this.showError = false;
+    }
+  }
+
+  checkValidForm() {
+    if (
+      this.searchOptions.destination.length !== 0 &&
+      this.searchOptions.country.length !== 0
+    ) {
+      this.validForm = true;
+    } else {
+      this.validForm = false;
     }
   }
   ngOnDestroy() {

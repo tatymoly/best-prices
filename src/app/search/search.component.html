@@ -1,6 +1,11 @@
 <mat-tab-group backgroundColor="primary">
+  <mat-tab>
+    <ng-template mat-tab-label>
+      <mat-icon class="example-tab-icon">tune</mat-icon>
+    </ng-template>
+  </mat-tab>
   <mat-tab label="ORIGEN">
-    <div class="row__container">
+    <mat-nav-list class="row__container">
       <form [formGroup]="options">
         <div class="row__list">
           <label>Country:</label>
@@ -28,7 +33,7 @@
           >
         </div>
       </form>
-    </div>
+    </mat-nav-list>
   </mat-tab>
   <mat-tab label="DESTINO">
     <div class="row__container">

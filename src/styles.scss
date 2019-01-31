@@ -3,7 +3,73 @@
 
 @include mat-core();
 
-$my-app-primary: mat-palette($mat-indigo, 900);
+$app-blue: (
+  50: #6981f7,
+  100: #6981f7,
+  200: #6981f7,
+  300: #6981f7,
+  400: #6981f7,
+  500: #6981f7,
+  600: #6981f7,
+  700: #6981f7,
+  800: #6981f7,
+  900: #6981f7,
+  A100: #6981f7,
+  A200: #6981f7,
+  A400: #6981f7,
+  A700: #6981f7,
+  contrast: (
+    50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: white,
+  ),
+);
+
+$app-orange: (
+  50: #f29072,
+  100: #f29072,
+  200: #f29072,
+  300: #f29072,
+  400: #f29072,
+  500: #f29072,
+  600: #f29072,
+  700: #f29072,
+  800: #f29072,
+  900: #f29072,
+  A100: #f29072,
+  A200: #f29072,
+  A400: #f29072,
+  A700: #f29072,
+  contrast: (
+    50: white,
+    100: white,
+    200: white,
+    300: white,
+    400: white,
+    500: white,
+    600: white,
+    700: white,
+    800: white,
+    900: white,
+    A100: white,
+    A200: white,
+    A400: white,
+    A700: white,
+  ),
+);
+
+$my-app-primary: mat-palette($app-blue, 900);
 $my-app-accent: mat-palette($mat-red, A100);
 $my-app-warn: mat-palette($mat-deep-orange);
 $my-app-theme: mat-light-theme($my-app-primary, $my-app-accent, $my-app-warn);
@@ -23,8 +89,4 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
-}
-
-/deep/ .mat-tab-nav-bar .mat-background-primary .mat-tab-links {
-  background-color: yellow;
 }

@@ -55,11 +55,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   showError: Boolean = false;
   loading: Boolean = false;
   validForm: Boolean = false;
+  showFilter: Boolean = true;
+  searchDone: Boolean = false;
   searchOptions = {
     country: '',
     destination: '',
   };
   options: FormGroup;
+  selectedIndex = 1;
 
   private unsub: Subject<any> = new Subject();
 
@@ -70,9 +73,9 @@ export class SearchComponent implements OnInit, OnDestroy {
     private datepipe: DatePipe
   ) {
     this.options = fb.group({
-      country: ['', Validators.required],
+      country: ['', [Validators.required]],
       origin: '',
-      destination: ['', Validators.required],
+      destination: ['', [Validators.required]],
     });
   }
 
@@ -93,7 +96,9 @@ export class SearchComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.unsub))
       .subscribe(res => {
         this.data = res;
+        this.searchDone = true;
         this.loading = false;
+        this.selectedIndex = 0;
       });
   }
 
@@ -144,6 +149,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       this.showError = false;
     }
   }
+
   checkValidForm() {
     if (
       this.searchOptions.destination.length !== 0 &&
@@ -157,5 +163,14 @@ export class SearchComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.unsub.next();
     this.unsub.complete();
+  }
+
+  tabChanged(event) {
+    const v = event.index;
+    if (v === 0) {
+      this.showFilter = false;
+    } else {
+      this.showFilter = true;
+    }
   }
 }

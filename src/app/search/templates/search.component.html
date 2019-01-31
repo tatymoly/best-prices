@@ -137,7 +137,7 @@
       </mat-progress-bar>
     </div>
   </div>
-  <div *ngIf="showFilter" class="row__container__gray"></div>
+  <div *ngIf="showFilter && searchDone" class="row__container__gray"></div>
   <div class="row__container row__container--results">
     <div *ngFor="let item of data">
       <div class="row__list__results">

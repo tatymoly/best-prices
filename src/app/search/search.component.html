@@ -53,6 +53,7 @@
             <div class="row__list">
               <label>Origen:</label>
               <mat-checkbox
+                color="primary"
                 formControlName="origin"
                 *ngFor="let option of cityGroup"
                 [value]="option.iataCode"
@@ -69,6 +70,7 @@
             <div class="row__list">
               <label>Destino:</label>
               <mat-checkbox
+                color="primary"
                 required
                 formControlName="destination"
                 *ngFor="let option of cityGroup"
@@ -85,10 +87,12 @@
           <div class="row__list__types">
             <label>Tipo de Viaje: </label>
             <mat-radio-group class="type-list">
-              <mat-radio-button #twoWays value="two-ways"
+              <mat-radio-button color="primary" #twoWays value="two-ways"
                 >Ida y Regreso</mat-radio-button
               >
-              <mat-radio-button value="one-way">Solo Ida</mat-radio-button>
+              <mat-radio-button color="primary" value="one-way"
+                >Solo Ida</mat-radio-button
+              >
             </mat-radio-group>
           </div>
           <div class="row__list">

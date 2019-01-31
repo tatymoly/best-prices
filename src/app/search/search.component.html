@@ -1,132 +1,163 @@
-<mat-tab-group backgroundColor="primary">
-  <mat-tab>
-    <ng-template mat-tab-label>
-      <mat-icon class="example-tab-icon">tune</mat-icon>
-    </ng-template>
-  </mat-tab>
-  <mat-tab label="ORIGEN">
-    <mat-nav-list class="row__container">
-      <form [formGroup]="options">
-        <div class="row__list">
-          <label>Country:</label>
-          <mat-form-field>
-            <mat-select required formControlName="country">
-              <mat-option>-- None --</mat-option>
-              <mat-option
-                (click)="checkCountryValue($event)"
-                [value]="option.country"
-                name="country"
-                *ngFor="let option of countryGroup"
-                >{{ option.country }}</mat-option
-              >
-            </mat-select>
-          </mat-form-field>
-        </div>
-        <div class="row__list">
-          <label>Origen:</label>
-          <mat-checkbox
-            formControlName="origin"
-            *ngFor="let option of cityGroup"
-            [value]="option.iataCode"
-            (change)="checkOriginValue($event)"
-            >{{ option.name }}</mat-checkbox
-          >
-        </div>
-      </form>
-    </mat-nav-list>
-  </mat-tab>
-  <mat-tab label="DESTINO">
-    <div class="row__container">
-      <form [formGroup]="options">
-        <div class="row__list">
-          <label>Destino:</label>
-          <mat-checkbox
-            required
-            formControlName="destination"
-            *ngFor="let option of cityGroup"
-            [value]="option.iataCode"
-            (change)="checkDestinationValue($event)"
-            >{{ option.name }}</mat-checkbox
-          >
-        </div>
-      </form>
-    </div>
-  </mat-tab>
-  <mat-tab label="FECHA">
-    <div class="row__container">
-      <div class="row__list__types">
-        <label>Tipo de Viaje: </label>
-        <mat-radio-group class="type-list">
-          <mat-radio-button #twoWays value="two-ways"
-            >Ida y Regreso</mat-radio-button
-          >
-          <mat-radio-button value="one-way">Solo Ida</mat-radio-button>
-        </mat-radio-group>
-      </div>
-      <div class="row__list">
-        <mat-form-field>
-          <input
-            matInput
-            (dateChange)="checkDepartureDate($event)"
-            [matDatepicker]="choosenDate"
-            placeholder="Fecha de Ida"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="choosenDate"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #choosenDate></mat-datepicker>
-        </mat-form-field>
-        <mat-form-field *ngIf="twoWays.checked">
-          <input
-            matInput
-            (dateChange)="checkReturnDate($event)"
-            [matDatepicker]="returnDateMin"
-            placeholder="Fecha de Regreso"
-          />
-          <mat-datepicker-toggle
-            matSuffix
-            [for]="returnDateMin"
-          ></mat-datepicker-toggle>
-          <mat-datepicker #returnDateMin></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
-  </mat-tab>
-</mat-tab-group>
-
-<mat-error *ngIf="showError" class="error--text">
-  ¡El origen y destino no pueden ser iguales!
-</mat-error>
-<button
-  class="btn btn__send"
-  mat-raised-button
-  color="primary"
-  [routerLink]="['']"
-  (click)="sendParamsOptions()"
-  [disabled]="!validForm"
->
-  Buscar
-</button>
-<div *ngIf="loading" class="row__container">
-  <mat-progress-bar value="25" mode="indeterminate" color="accent">
-  </mat-progress-bar>
+<div class="row__container">
+  <h4>Viajala busca en estos sitios de viaje y descenas más.</h4>
+  <div class="logos">
+    <img
+      src="https://www.avianca.com/content/dam/avianca_new/logos/logo_avianca_rojo.png?newux=true"
+      alt="Logo Avianca"
+    />
+    <img
+      src="http://www.k-digital.es/wp-content/uploads/2015/04/logo-atrapalo.png"
+      alt="Logo Atrapalo"
+    />
+    <img
+      src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fe/Latam-logo_-v_%28Indigo%29.svg/800px-Latam-logo_-v_%28Indigo%29.svg.png"
+      alt="Logo Latam"
+    />
+  </div>
+  <h4 *ngIf="searchDone">
+    Las ofertas más baratas de hoy para {{ data[0].destination.city }}
+  </h4>
 </div>
 
-<div class="row__container">
-  <div *ngFor="let item of data">
-    <div class="row__list__results">
-      <p>{{ item.origin.iata }}</p>
-      <mat-icon class="icon">arrow_right_alt</mat-icon>
-      <p>{{ item.destination.iata }}</p>
-      <button
-        mat-raised-button
-        color="accent"
-        class="btn btn__price"
-        routerLink="{{ item.deeplink }}"
-      >
-        {{ item.price | currency }}
-      </button>
+<div class="search__options">
+  <div class="filter" [ngClass]="!showFilter ? 'filter__hide' : 'filter_show'">
+    <mat-tab-group
+      #tabGroup
+      (selectedTabChange)="tabChanged($event)"
+      backgroundColor="primary"
+      [(selectedIndex)]="selectedIndex"
+    >
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="example-tab-icon">tune</mat-icon>
+        </ng-template>
+      </mat-tab>
+      <mat-tab label="ORIGEN">
+        <mat-nav-list class="row__container">
+          <form [formGroup]="options">
+            <div class="row__list">
+              <label>Country:</label>
+              <mat-form-field>
+                <mat-select required formControlName="country">
+                  <mat-option>-- None --</mat-option>
+                  <mat-option
+                    (click)="checkCountryValue($event)"
+                    [value]="option.country"
+                    name="country"
+                    *ngFor="let option of countryGroup"
+                    >{{ option.country }}</mat-option
+                  >
+                </mat-select>
+              </mat-form-field>
+            </div>
+            <div class="row__list">
+              <label>Origen:</label>
+              <mat-checkbox
+                formControlName="origin"
+                *ngFor="let option of cityGroup"
+                [value]="option.iataCode"
+                (change)="checkOriginValue($event)"
+                >{{ option.name }}</mat-checkbox
+              >
+            </div>
+          </form>
+        </mat-nav-list>
+      </mat-tab>
+      <mat-tab label="DESTINO">
+        <div class="row__container">
+          <form [formGroup]="options">
+            <div class="row__list">
+              <label>Destino:</label>
+              <mat-checkbox
+                required
+                formControlName="destination"
+                *ngFor="let option of cityGroup"
+                [value]="option.iataCode"
+                (change)="checkDestinationValue($event)"
+                >{{ option.name }}</mat-checkbox
+              >
+            </div>
+          </form>
+        </div>
+      </mat-tab>
+      <mat-tab label="FECHA">
+        <div class="row__container">
+          <div class="row__list__types">
+            <label>Tipo de Viaje: </label>
+            <mat-radio-group class="type-list">
+              <mat-radio-button #twoWays value="two-ways"
+                >Ida y Regreso</mat-radio-button
+              >
+              <mat-radio-button value="one-way">Solo Ida</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <div class="row__list">
+            <mat-form-field>
+              <input
+                matInput
+                (dateChange)="checkDepartureDate($event)"
+                [matDatepicker]="choosenDate"
+                placeholder="Fecha de Ida"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="choosenDate"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #choosenDate></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field *ngIf="twoWays.checked">
+              <input
+                matInput
+                (dateChange)="checkReturnDate($event)"
+                [matDatepicker]="returnDateMin"
+                placeholder="Fecha de Regreso"
+              />
+              <mat-datepicker-toggle
+                matSuffix
+                [for]="returnDateMin"
+              ></mat-datepicker-toggle>
+              <mat-datepicker #returnDateMin></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <mat-error *ngIf="showError" class="error--text">
+      ¡El origen y destino no pueden ser iguales!
+    </mat-error>
+    <button
+      *ngIf="showFilter"
+      class="btn btn__send"
+      mat-raised-button
+      color="primary"
+      [routerLink]="['']"
+      (click)="sendParamsOptions()"
+      [disabled]="!validForm"
+    >
+      Buscar
+    </button>
+    <div *ngIf="loading" class="row__container">
+      <mat-progress-bar value="25" mode="indeterminate" color="accent">
+      </mat-progress-bar>
+    </div>
+  </div>
+  <div *ngIf="showFilter" class="row__container__gray"></div>
+  <div class="row__container row__container--results">
+    <div *ngFor="let item of data">
+      <div class="row__list__results">
+        <p>{{ item.origin.iata }}</p>
+        <mat-icon class="icon">arrow_right_alt</mat-icon>
+        <p>{{ item.destination.iata }}</p>
+        <button
+          mat-raised-button
+          color="accent"
+          class="btn btn__price"
+          routerLink="{{ item.deeplink }}"
+        >
+          {{ item.price | currency }}
+        </button>
+      </div>
     </div>
   </div>
 </div>
